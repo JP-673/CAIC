@@ -23,8 +23,8 @@ import {
   Coins
 } from 'lucide-react';
 import { ResponsiveContainer, Tooltip as RechartsTooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, LabelList, Cell } from 'recharts';
-import { MiningRow, SkillSettings, MineralType } from './types';
-import { ORE_LIST, MINERAL_ORDER } from './constants';
+import { MiningRow, SkillSettings, MineralType } from './types.ts';
+import { ORE_LIST, MINERAL_ORDER } from './constants.ts';
 
 const InfoTooltip = ({ text }: { text: string }) => (
   <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 p-2 bg-slate-950 border border-violet-500/40 rounded text-[10px] text-violet-100 leading-tight shadow-2xl opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-[100] backdrop-blur-xl text-center">
