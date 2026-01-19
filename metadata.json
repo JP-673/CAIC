@@ -1,0 +1,5 @@
+{
+  "name": "EVE Industry: Mining & Reprocessing Calculator",
+  "description": "A comprehensive profit and mineral yield calculator for EVE Online pilots. Calculate ore values, reprocessing yields with skill bonuses, and get AI-powered mining insights.",
+  "requestFramePermissions": []
+}
