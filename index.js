@@ -201,7 +201,6 @@ function render() {
 
           <nav class="hidden lg:flex items-center bg-slate-900/60 rounded-lg p-1 border border-white/5">
             <button onclick="changeTab('calculator')" class="tab-btn ${state.activeTab === 'calculator' ? 'active' : ''} px-6 py-2 rounded-md text-[10px] font-black uppercase transition-all text-zinc-500 hover:text-zinc-300">Cargo Deck</button>
-            <button onclick="changeTab('minerals')" class="tab-btn ${state.activeTab === 'minerals' ? 'active' : ''} px-6 py-2 rounded-md text-[10px] font-black uppercase transition-all text-zinc-500 hover:text-zinc-300">Moon Matrix</button>
             <button onclick="changeTab('buyback')" class="tab-btn ${state.activeTab === 'buyback' ? 'active' : ''} px-6 py-2 rounded-md text-[10px] font-black uppercase transition-all text-zinc-500 hover:text-zinc-300">Buyback Hub</button>
           </nav>
 
@@ -353,37 +352,6 @@ function renderActiveTab(data) {
               ${state.rows.length === 0 ? `<tr><td colspan="5" class="px-6 py-10 text-center text-[10px] text-zinc-700 font-black uppercase tracking-widest italic">Manifest is empty... awaiting data input.</td></tr>` : ''}
             </tbody>
           </table>
-        </div>
-      </div>
-    `;
-  }
-  
-  if (state.activeTab === 'minerals') {
-    return `
-      <div class="glass-card rounded-2xl p-8 border border-indigo-500/10">
-        <div class="flex items-center gap-3 mb-10">
-           <i data-lucide="flask-conical" class="w-6 h-6 text-indigo-400"></i>
-           <h2 class="font-extrabold text-lg uppercase tracking-widest text-white">Mineral & Alloy Projections</h2>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          ${MINERAL_ORDER.map(m => `
-            <div class="bg-slate-900/60 p-4 rounded-xl border border-white/5 hover:border-indigo-500/30 transition-all">
-              <label class="text-[9px] text-zinc-500 uppercase font-black mb-2 block tracking-widest">${m}</label>
-              <div class="flex items-center gap-2">
-                 <input type="number" value="${state.mineralPrices[m]}" oninput="updateMineralPrice('${m}', this.value)" class="bg-transparent text-sm font-bold text-white mono w-full outline-none">
-                 <span class="text-[9px] text-zinc-700 font-black">ISK</span>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          ${Object.entries(data.minerals).map(([name, val]) => `
-            <div class="bg-indigo-500/5 border border-indigo-500/10 p-5 rounded-xl hover:bg-indigo-500/10 transition-all">
-              <span class="text-[9px] text-indigo-400 uppercase font-black block mb-2 tracking-[0.2em]">${name}</span>
-              <span class="text-xl font-black text-white mono">${Math.round(val).toLocaleString()}</span>
-              <div class="text-[10px] text-zinc-500 mono mt-3 pt-3 border-t border-white/5">≈ ${Math.round(val * (state.mineralPrices[name] || 0)).toLocaleString()} ISK</div>
-            </div>
-          `).join('')}
         </div>
       </div>
     `;

@@ -34,31 +34,31 @@ const InfoTooltip = ({ text }: { text: string }) => (
 );
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'calculator' | 'minerals' | 'buyback'>('calculator');
-  const [buybackRate, setBuybackRate] = useState<number>(80);
+  const [activeTab, setActiveTab] = useState<'calculator' | 'buyback'>('calculator');
+  const [buybackRate, setBuybackRate] = useState<number>(90);
   const [skills, setSkills] = useState<SkillSettings>({
     reprocessing: 5,
     reprocessingEfficiency: 5,
     oreSpecialization: 5,
     stationTax: 1.0, 
     stationYield: 56, 
-    implantBonus: 1.0,
+    implantBonus: 1.04,
   });
 
   const [mineralPrices, setMineralPrices] = useState<Record<MineralType, number>>({
-    Tritanium: 5.5,
-    Pyerite: 13.0,
-    Mexallon: 48.0,
-    Isogen: 135.0,
-    Nocxium: 860.0,
-    Zydrine: 1850.0,
-    Megacyte: 2600.0,
-    Morphite: 14800.0,
+    Tritanium: 5.8,
+    Pyerite: 14.2,
+    Mexallon: 46.5,
+    Isogen: 138.0,
+    Nocxium: 840.0,
+    Zydrine: 1820.0,
+    Megacyte: 2550.0,
+    Morphite: 15200.0,
   });
 
   const [rows, setRows] = useState<MiningRow[]>([
     { id: '1', oreName: 'Arkonor', quantity: 500, unitPrice: 2200.0 },
-    { id: '2', oreName: 'Fullerite-C320', quantity: 1500, unitPrice: 42000.0 },
+    { id: '2', oreName: 'Fullerite-C320', quantity: 2500, unitPrice: 48000.0 },
     { id: '3', oreName: 'Bitumens', quantity: 2000, unitPrice: 150.0 },
   ]);
 
@@ -116,11 +116,11 @@ export default function App() {
   const efficiencyComparisonData = useMemo(() => {
     const data = [];
     if (oreStats.volume > 0) {
-      data.push({ name: 'Raw WH Ore', iskPerM3: Math.round(oreStats.iskPerM3), color: '#8b5cf6' });
-      data.push({ name: 'Refined WH', iskPerM3: Math.round(reprocessedIskPerM3), color: '#d946ef' });
+      data.push({ name: 'Raw Manifest', iskPerM3: Math.round(oreStats.iskPerM3), color: '#8b5cf6' });
+      data.push({ name: 'Refined Potential', iskPerM3: Math.round(reprocessedIskPerM3), color: '#d946ef' });
     }
     if (gasStats.volume > 0) {
-      data.push({ name: 'Raw Fullerite', iskPerM3: Math.round(gasStats.iskPerM3), color: '#f59e0b' });
+      data.push({ name: 'Gas Density', iskPerM3: Math.round(gasStats.iskPerM3), color: '#f59e0b' });
     }
     return data;
   }, [oreStats, reprocessedIskPerM3, gasStats]);
@@ -132,7 +132,6 @@ export default function App() {
   const addRow = () => setRows([...rows, { id: Math.random().toString(36).substr(2, 9), oreName: ORE_LIST[0].name, quantity: 0, unitPrice: 0 }]);
   const removeRow = (id: string) => setRows(rows.filter(r => r.id !== id));
   const updateRow = (id: string, field: keyof MiningRow, value: any) => setRows(rows.map(r => r.id === id ? { ...r, [field]: value } : r));
-  const updateMineralPrice = (m: MineralType, p: number) => setMineralPrices(prev => ({ ...prev, [m]: p }));
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -146,7 +145,7 @@ export default function App() {
               <h1 className="text-xl font-extrabold text-white uppercase leading-none mb-1 tracking-tight">Astraea Deep-Space</h1>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <p className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold">Static Terminal Online</p>
+                <p className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold">Industrial Instance Online</p>
               </div>
             </div>
           </div>
@@ -154,7 +153,6 @@ export default function App() {
           <nav className="hidden lg:flex items-center bg-slate-900/60 rounded-lg p-1 border border-white/5">
             {[
               { id: 'calculator', label: 'Cargo Deck', icon: Calculator, desc: 'Manifest of raw ores and gases.' },
-              { id: 'minerals', label: 'Moon Matrix', icon: Activity, desc: 'Mineral prices and Athanor yields.' },
               { id: 'buyback', label: 'Buyback Hub', icon: Handshake, desc: 'Corporation buyback calculations.' },
             ].map(tab => (
               <button 
@@ -292,43 +290,6 @@ export default function App() {
             </div>
           )}
 
-          {activeTab === 'minerals' && (
-            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="glass-card rounded-2xl p-8 border border-indigo-500/10">
-                <div className="flex items-center justify-between mb-10">
-                  <div className="flex items-center gap-3">
-                    <FlaskConical className="w-6 h-6 text-indigo-400" />
-                    <h2 className="font-extrabold text-lg uppercase tracking-widest text-white">Athanor Refining Core</h2>
-                  </div>
-                  <div className="group/tip relative bg-indigo-500/10 border border-indigo-500/20 px-4 py-2 rounded-lg flex items-center gap-3">
-                    <Cpu className="w-4 h-4 text-indigo-400" />
-                    <span className="text-[10px] font-black text-indigo-300 uppercase tracking-widest">Yield Index: {(calculatedYield * 100).toFixed(2)}%</span>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-                  {MINERAL_ORDER.map((name) => (
-                    <div key={name} className="bg-slate-900/60 border border-white/5 p-4 rounded-xl group/tip transition-all hover:border-indigo-500/30 relative">
-                      <label className="block text-[9px] text-zinc-500 font-black uppercase mb-2 tracking-widest">{name}</label>
-                      <div className="flex items-baseline gap-2">
-                        <input type="number" value={mineralPrices[name as MineralType]} onChange={(e) => updateMineralPrice(name as MineralType, Number(e.target.value))} className="bg-transparent text-sm font-bold text-white mono focus:outline-none w-full" />
-                        <span className="text-[9px] text-zinc-600 font-bold">ISK</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {mineralBreakdown.map((item) => (
-                    <div key={item.name} className="bg-indigo-500/5 border border-indigo-500/10 p-5 rounded-xl text-center group/tip transition-all hover:bg-indigo-500/10 relative">
-                      <span className="text-[9px] text-indigo-400 font-black uppercase mb-2 block tracking-[0.2em]">{item.name}</span>
-                      <span className="text-xl font-extrabold text-white mono leading-none">{item.value.toLocaleString()}</span>
-                      <div className="mt-3 text-[10px] text-zinc-500 mono">≈ {(item.value * (mineralPrices[item.name as MineralType] || 0)).toLocaleString()} ISK</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
           {activeTab === 'buyback' && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="glass-card rounded-2xl p-8 border border-emerald-500/10">
@@ -381,14 +342,6 @@ export default function App() {
                          ))}
                       </tbody>
                    </table>
-                </div>
-
-                <div className="mt-10 bg-emerald-500/5 border border-emerald-500/10 p-6 rounded-2xl flex items-center gap-6">
-                   <ArrowRightLeft className="w-8 h-8 text-emerald-500 opacity-50" />
-                   <div className="flex-1">
-                      <h4 className="text-xs font-black text-white uppercase tracking-widest mb-1">Corporate Logistics Benefit</h4>
-                      <p className="text-[10px] text-zinc-500 leading-relaxed italic">Selling via buyback eliminates market taxes, broker fees, and the high-risk logistics of hauling through contested J-Space pipelines.</p>
-                   </div>
                 </div>
               </div>
             </div>
@@ -453,13 +406,6 @@ export default function App() {
           </div>
         </div>
       </main>
-
-      <footer className="border-t border-white/5 p-10 bg-slate-950/90">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-4"><div className="w-3 h-3 rounded-full bg-violet-500/20 border border-violet-500 animate-pulse" /><p className="text-zinc-600 text-[9px] font-black uppercase tracking-[0.3em]">ASTRAEA TERMINAL v4.0.0 (Static)</p></div>
-          <div className="flex gap-10"><span className="text-zinc-700 text-[10px] uppercase font-black">Zero-Key Access</span><span className="text-zinc-700 text-[10px] uppercase font-black">Open Source Industrial Utility</span></div>
-        </div>
-      </footer>
     </div>
   );
 }
