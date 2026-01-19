@@ -1,5 +1,5 @@
 {
-  "name": "EVE Industry: Mining & Reprocessing Calculator",
-  "description": "A comprehensive profit and mineral yield calculator for EVE Online pilots. Calculate ore values, reprocessing yields with skill bonuses, and get AI-powered mining insights.",
+  "name": "Astraea: J-Space Mining Terminal",
+  "description": "High-fidelity vanilla JS mining calculator for EVE Online. Optimized for wormhole, null-sec, and moon ore reprocessing.",
   "requestFramePermissions": []
 }
